@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta title="Label Editor" ></meta>
+	<link href="webjars/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet"></link>
+
+</head>
+
+<body>
+
+
+	<div class="container">
+
+		<div class="jumbotron">
+			<h1>Label Editor</h1>
+			<h4>Locale: <span th:text="${locale}"></span></h4>
+		</div>
+
+		<form>
+			<table class="table table-striped">
+				<tr>
+				  <th>ID</th>
+				  <th>Key</th> 
+				  <th>Value</th>
+				</tr>
+				<tr th:each="label : ${labels}">
+				  <td th:text="${label.id}"></td>
+				  <td th:text="${label.key}"></td>
+				  <td><input class="form-control values" type="text" th:value="${label.value}"></input></td>
+<!-- 				  <td th:text="${label.value}"></td> -->
+				</tr>
+			</table>
+		</form>
+
+
+
+	</div>
+
+	 <!-- Adding JS Components -->
+	 <script src="webjars/jquery/3.2.0/jquery.min.js"></script>
+	 <script src="webjars/bootstrap/3.1.1/bootstrap.min.js"></script>
+	 
+	 <script type="text/javascript">
+	 
+	 $("input.values").click(function(ev){
+		 console.log("ev", ev.target);
+	 });
+	 
+	 </script>
+	 
+	 
+</body>
+
+</html>
