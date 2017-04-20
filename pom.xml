@@ -76,6 +76,27 @@
 			<version>3.2.0</version>
 		</dependency>
 		
+		<!-- core component for swagger -->
+		<dependency>
+		    <groupId>io.springfox</groupId>
+		    <artifactId>springfox-swagger2</artifactId>
+		    <version>2.6.1</version>
+		</dependency>
+
+		<!-- component for swagger ui -->
+		<dependency>
+		    <groupId>io.springfox</groupId>
+		    <artifactId>springfox-swagger-ui</artifactId>
+		    <version>2.6.1</version>
+		</dependency>
+		
+		<!-- component for swagger to enable Rest Services created with RepositoryRestResource annotation -->
+		<dependency>
+		    <groupId>io.springfox</groupId>
+		    <artifactId>springfox-data-rest</artifactId>
+		    <version>2.6.1</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>

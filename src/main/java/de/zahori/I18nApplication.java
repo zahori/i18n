@@ -18,19 +18,24 @@ public class I18nApplication {
 		
 	}
 	
+	/**
+	 * This will be executed on Startup, to initialize some testdata.
+	 * 
+	 * @param labelRepository will be injected
+	 */
 	@Bean
-	public ApplicationRunner createDemoData( LabelRepository repo ){
+	public ApplicationRunner createDemoData( LabelRepository labelRepository ){
 		
 		return (args) -> {
 			
 			Locale l = new Locale("de");
-			repo.save(new Label(l, "greeting", "Guten Tag!"));
-			repo.save(new Label(l, "title", "Mein Label Editor"));
+			labelRepository.save(new Label(l, "greeting", "Guten Tag!"));
+			labelRepository.save(new Label(l, "title", "Mein Label Editor"));
 			l = new Locale("en");
-			repo.save(new Label(l, "greeting", "Hey Dude!"));
-			repo.save(new Label(l, "title", "My Label Editor"));
+			labelRepository.save(new Label(l, "greeting", "Hey Dude!"));
+			labelRepository.save(new Label(l, "title", "My Label Editor"));
 		};
 		
-	}
+	}// end createDemoData
 	
 }
