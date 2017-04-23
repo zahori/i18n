@@ -3,7 +3,12 @@
 
 <head>
 	<meta title="Label Editor" ></meta>
-	<link href="webjars/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet"></link>
+	<link href="/webjars/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet"></link>
+
+	<style type="text/css">
+	
+	
+	</style>
 
 </head>
 
@@ -12,9 +17,17 @@
 
 	<div class="container">
 
-		<div class="jumbotron">
+		<div class="jumbotron ">
 			<h1>Label Editor</h1>
-			<h4>Locale: <span th:text="${locale}"></span></h4>
+			<form class="form-inline">
+				<div class="form-group">
+					<label for="locales">Sprache</label>
+					<span>&nbsp;</span>
+					<select id="locales" class="form-control" >
+					  <option th:each="locale : ${availableLocales}" th:text="${locale}" ></option>
+					</select>
+				</div>
+			</form>
 		</div>
 
 		<form>
@@ -27,8 +40,7 @@
 				<tr th:each="label : ${labels}">
 				  <td th:text="${label.id}"></td>
 				  <td th:text="${label.key}"></td>
-				  <td><input class="form-control values" type="text" th:value="${label.value}"></input></td>
-<!-- 				  <td th:text="${label.value}"></td> -->
+				  <td><input th:id="${label.id}" class="form-control values" type="text" th:value="${label.value}"></input></td>
 				</tr>
 			</table>
 		</form>
@@ -38,15 +50,102 @@
 	</div>
 
 	 <!-- Adding JS Components -->
-	 <script src="webjars/jquery/3.2.0/jquery.min.js"></script>
-	 <script src="webjars/bootstrap/3.1.1/bootstrap.min.js"></script>
+	 <script src="/webjars/jquery/3.2.0/jquery.min.js"></script>
+	 <script src="/webjars/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 	 
 	 <script type="text/javascript">
 	 
-	 $("input.values").click(function(ev){
-		 console.log("ev", ev.target);
-	 });
 	 
+	 	$( document ).ready( function(){
+	 		
+	 		// get language from url
+			var lang = getLanguageFromUrl();
+	 		
+	 		// change select to correct value
+			$( "#locales" ).val(lang);
+	 		
+	 		// fallback in case this site is called with "/site" instead of "/site/de" 
+	 		if($( "#locales" ).val() === null){
+	 			$( "#locales" ).val("de");
+	 		}
+	 		
+	 		// activate change listener (after the value has changed)
+			activateLocaleChangeListener();
+	 		
+	 	}); // end doc.ready
+	 
+	 	var getLanguageFromUrl = function(){
+	 		var langParam = window.location.pathname; // "/site/de"
+	 		var language = langParam.substring(langParam.lastIndexOf("/") + 1, langParam.length);
+	 		
+	 		console.log("language from url", language);
+	 		return language;
+	 	}
+	 
+		var activateLocaleChangeListener = function(){
+			
+			// change listener for select field, to switch pages
+			$( "#locales" ).change(function( val ) {
+				// get selected value
+				var lang = $( "#locales option:selected" ).text();
+				// change url path and redirect
+				
+		 		var href = document.location.href
+	 			var link = href.substring(0, href.lastIndexOf("/"));
+					 		
+				document.location.href = link + '/' + lang;
+			});
+		};
+
+	 	var sendNewValue = function( ev ){
+	 		
+	 		var url = "http://localhost:8080/label/"; // TODO: Dont hardcode this
+	 		var targetId = ev.target.id;
+	 		var newValue = $("#" + targetId).val();
+	 		
+	 		console.log("targetId", targetId );
+	 		console.log("newValue", newValue );
+	 		
+	 		//shorthand function
+	 		var success = (resp)=>{
+				console.log("success");
+				console.log("response",  resp);
+	 			$("input#"+resp.id).val(resp.value);
+	 			$("input#"+resp.id).prop('disabled', false);
+	 		}
+	 		
+	 		
+	 		
+	 		var showProcessing = ()=>{
+	 			$(ev.target).prop('disabled', true).val("bitte warten...");
+	 		}
+	 		
+	 		var error = (ev)=>{
+	 			console.error("Error while trying to change label.", ev);
+	 			alert("Fehler beim ändern des Labels.");
+	 		}
+	 		
+	 		$.ajax({
+	 			  type: "POST",
+	 			  url: url + targetId,
+	 			  data: newValue,
+	 			  beforeSend: showProcessing,
+	 			  success: success,
+	 			  error: error,
+	 			  contentType: "application/json;charset=UTF-8"
+	 			});
+	 		
+	 	};
+	 	
+	 	$("input.values").focusout(sendNewValue);
+	 	
+	 	$('input.values').keypress(function (e) {
+	 		  if (e.which == 13) {
+	 			 sendNewValue(e)
+	 		    return false;    //important!
+	 		  }
+ 		});
+	
 	 </script>
 	 
 	 
