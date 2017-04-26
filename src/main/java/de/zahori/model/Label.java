@@ -19,6 +19,7 @@ public class Label {
 	private Locale locale;
 	
 	private String key;
+	
 	private String value;
 	
 	public Label(Locale locale, String key, String value){

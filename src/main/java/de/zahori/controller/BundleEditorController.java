@@ -34,7 +34,7 @@ public class BundleEditorController {
 //		model.addAllAttributes(labelService.getLabelBundle( new Locale("de") ));
 //		model.addAttribute("labels", labelService.getLabelBundle( new Locale("de") ));
 		
-		return this.indexWithLocale(model, "de");
+		return "redirect:/site/" + "de";
 	}
 	
 	@RequestMapping(path="/{lang}")

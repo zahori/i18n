@@ -82,21 +82,6 @@
 	 		return language;
 	 	}
 	 
-		var activateLocaleChangeListener = function(){
-			
-			// change listener for select field, to switch pages
-			$( "#locales" ).change(function( val ) {
-				// get selected value
-				var lang = $( "#locales option:selected" ).text();
-				// change url path and redirect
-				
-		 		var href = document.location.href
-	 			var link = href.substring(0, href.lastIndexOf("/"));
-					 		
-				document.location.href = link + '/' + lang;
-			});
-		};
-
 	 	var sendNewValue = function( ev ){
 	 		
 	 		var url = "http://localhost:8080/label/"; // TODO: Dont hardcode this
@@ -125,6 +110,7 @@
 	 			alert("Fehler beim ändern des Labels.");
 	 		}
 	 		
+	 		// send request to update the label
 	 		$.ajax({
 	 			  type: "POST",
 	 			  url: url + targetId,
@@ -137,6 +123,25 @@
 	 		
 	 	};
 	 	
+	 	//######################################
+		//####		Events Listeners 	   #####
+	 	//######################################
+	 	
+		var activateLocaleChangeListener = function(){
+			
+			// change listener for select field, to switch pages
+			$( "#locales" ).change(function( val ) {
+				// get selected value
+				var lang = $( "#locales option:selected" ).text();
+				// change url path and redirect
+				
+		 		var href = document.location.href
+	 			var link = href.substring(0, href.lastIndexOf("/"));
+					 		
+				document.location.href = link + '/' + lang;
+			});
+		};
+		
 	 	$("input.values").focusout(sendNewValue);
 	 	
 	 	$('input.values').keypress(function (e) {
